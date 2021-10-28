@@ -37,7 +37,7 @@ class Condition
      * @param $value
      * @param string $boolean
      */
-    function __construct($field, $operator, $value, $boolean = 'and')
+    function __construct($field, $operator, $value, string $boolean = 'and')
     {
         $this->setField($field);
         $this->setOperator($operator);
@@ -57,7 +57,7 @@ class Condition
      * @param $field
      * @return $this
      */
-    function setField($field)
+    function setField($field): Condition
     {
         if (is_string($field)) {
             $this->_field = $field;
@@ -68,7 +68,7 @@ class Condition
     /**
      * @return string
      */
-    function getValue()
+    function getValue(): string
     {
         return $this->_value;
     }
@@ -86,7 +86,7 @@ class Condition
     /**
      * @return string
      */
-    function getOperator()
+    function getOperator(): string
     {
         return $this->_operator;
     }
@@ -95,7 +95,7 @@ class Condition
      * @param string $operator
      * @return $this
      */
-    function setOperator($operator = '=')
+    function setOperator(string $operator = '='): Condition
     {
         if (is_string($operator)) {
             $this->_operator = preg_replace('/\s+/', ' ', strtolower(trim($operator)));

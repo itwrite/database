@@ -111,7 +111,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function insert(Array $data = [], $is_replace = false): int
+    public function insert(Array $data = [], bool $is_replace = false): int
     {
         $Link = $this->getLink(true);
         //set data
@@ -643,7 +643,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function setInc($field, $inc = 1)
+    public function setInc($field, int $inc = 1)
     {
         return $this->set($field, new Expression($field . "+" . $inc))->update();
     }
@@ -655,7 +655,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function setDec($field, $inc = 1)
+    public function setDec($field, int $inc = 1)
     {
         return $this->set($field, new Expression($field . "-" . $inc))->update();
     }

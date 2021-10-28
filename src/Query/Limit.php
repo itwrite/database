@@ -14,16 +14,10 @@ use Jasmine\Database\Query\Schema\Eloquent;
 class Limit extends Eloquent{
 
     /**
-     * array(offset,pageSize)
-     * @var array
-     */
-    protected $data = array();
-
-    /**
      * @param $offset
      * @return $this
      */
-    function setOffset($offset)
+    function setOffset($offset): Limit
     {
         $offset = intval($offset);
         $this->data[0] = $offset < 0 ? 0 : $offset;
@@ -34,7 +28,7 @@ class Limit extends Eloquent{
      * @param int $page_size
      * @return $this
      */
-    function setPageSize($page_size = 0)
+    function setPageSize(int $page_size = 0): Limit
     {
         !empty($this->data) && $this->data[1] = $page_size;
         return $this;
@@ -43,7 +37,7 @@ class Limit extends Eloquent{
     /**
      * @return $this
      */
-    function clear()
+    function clear(): Limit
     {
         if (count(array_keys($this->data))>0) {
             $this->cache[] = $this->data;

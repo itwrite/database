@@ -17,7 +17,7 @@ interface DatabaseInterface
      * @return mixed
      * itwri 2019/12/19 14:33
      */
-    public function insert(Array $data = [], $is_replace = false);
+    public function insert(Array $data = [], bool $is_replace = false);
 
     /**
      * update data for table
@@ -33,7 +33,7 @@ interface DatabaseInterface
      * @return mixed
      * itwri 2019/12/19 14:34
      */
-    public function setInc($field, $inc = 1);
+    public function setInc($field, int $inc = 1);
 
     /**
      * @param $field
@@ -41,7 +41,7 @@ interface DatabaseInterface
      * @return mixed
      * itwri 2019/12/19 14:34
      */
-    public function setDec($field, $inc = 1);
+    public function setDec($field, int $inc = 1);
 
     /**
      * @return mixed
@@ -107,7 +107,7 @@ interface DatabaseInterface
      * itwri 2020/7/7 11:04
      */
     public function getLogger();
-    
+
     /**
      * @param $logger
      * @return mixed
