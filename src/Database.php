@@ -47,7 +47,7 @@ class Database extends Builder implements DatabaseInterface
 
         $this->Logger = $logger;
 
-        $this->tablePrefix = isset($config['table_prefix']) ? $config['table_prefix'] : '';
+        $this->tablePrefix = $config['table_prefix'] ?? '';
         $this->Connection = new Connection($config);
     }
 
@@ -55,7 +55,7 @@ class Database extends Builder implements DatabaseInterface
      * @param bool $debug
      * @return $this
      */
-    public function debug($debug = false)
+    public function debug(bool $debug = false): Database
     {
         $this->debug = $debug == true;
         return $this;
@@ -66,7 +66,7 @@ class Database extends Builder implements DatabaseInterface
      * @return $this
      * itwri 2019/12/19 14:33
      */
-    public function sticky($sticky)
+    public function sticky($sticky): Database
     {
         $this->_sticky = $sticky == true;
         return $this;
@@ -76,7 +76,7 @@ class Database extends Builder implements DatabaseInterface
      * @param $name
      * @return $this
      */
-    public function link($name)
+    public function link($name): Database
     {
         $this->linkName = $name;
         return $this;
@@ -111,7 +111,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function insert(Array $data = [], $is_replace = false)
+    public function insert(Array $data = [], $is_replace = false): int
     {
         $Link = $this->getLink(true);
         //set data
@@ -249,7 +249,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function count()
+    public function count(): int
     {
         $this->limit(1);
         //get the select sql
@@ -293,7 +293,7 @@ class Database extends Builder implements DatabaseInterface
      * @return bool|mixed
      * itwri 2019/12/19 14:29
      */
-    public function first($fields = '*', $fetch_type = \PDO::FETCH_ASSOC)
+    public function first(string $fields = '*', int $fetch_type = \PDO::FETCH_ASSOC)
     {
         return call_user_func_array([$this, 'get'], [$fields, $fetch_type]);
     }
@@ -305,7 +305,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function getAll($fields = null, $fetch_type = \PDO::FETCH_ASSOC)
+    public function getAll($fields = null, int $fetch_type = \PDO::FETCH_ASSOC): array
     {
         parent::fields($fields);
 
@@ -325,7 +325,7 @@ class Database extends Builder implements DatabaseInterface
      * @param int $fetch_type
      * @return mixed
      */
-    function select($fields = '*', $fetch_type = \PDO::FETCH_ASSOC)
+    function select(string $fields = '*', int $fetch_type = \PDO::FETCH_ASSOC)
     {
         return call_user_func_array([$this, 'getAll'], func_get_args());
     }
@@ -337,7 +337,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    function paginator($page = 1, $pageSize = 10)
+    function paginator(int $page = 1, int $pageSize = 10): array
     {
 
         $page = $page < 1 ? 1 : $page;
@@ -477,7 +477,7 @@ class Database extends Builder implements DatabaseInterface
      * @return $this
      * itwri 2019/12/2 16:33
      */
-    public function masterHandle($closure)
+    public function masterHandle($closure): Database
     {
         $this->_sticky = true;
         if (is_callable($closure)) {
@@ -491,7 +491,7 @@ class Database extends Builder implements DatabaseInterface
      * @param $statement
      * @return bool
      */
-    protected function isWriteAction($statement)
+    protected function isWriteAction($statement): bool
     {
         $statement = strtolower(trim($statement));
         if (strpos($statement, 'insert') !== false
@@ -511,7 +511,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    function startTrans()
+    function startTrans(): bool
     {
         if (!$this->getLink()->getPdo()->inTransaction()) {
             return $this->getLink()->getPdo()->beginTransaction();
@@ -524,7 +524,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    function commit()
+    function commit(): bool
     {
         if ($this->getLink()->getPdo()->inTransaction()) {
             return $this->getLink()->getPdo()->commit();
@@ -538,7 +538,7 @@ class Database extends Builder implements DatabaseInterface
      * @throws \Exception
      * itwri 2019/12/19 13:59
      */
-    public function rollback()
+    public function rollback(): bool
     {
         if ($this->getLink()->getPdo()->inTransaction()) {
             return $this->getLink()->getPdo()->rollBack();
@@ -589,7 +589,7 @@ class Database extends Builder implements DatabaseInterface
      * @param $callback
      * @return $this
      */
-    public function trace($callback)
+    public function trace($callback): Database
     {
         if ($callback instanceof \Closure) {
             /**
@@ -609,7 +609,7 @@ class Database extends Builder implements DatabaseInterface
      * pop out the last one SQL;
      * @return string
      */
-    public function getLastSql()
+    public function getLastSql(): string
     {
         $SQL = $this->logSQLs[count($this->logSQLs) - 1];
         return $SQL ? $SQL : "";
@@ -619,7 +619,7 @@ class Database extends Builder implements DatabaseInterface
      * @param string $sql
      * @return $this
      */
-    protected function cacheSql($sql)
+    protected function cacheSql($sql): Database
     {
         $this->logSQLs[] = $sql;
         return $this;

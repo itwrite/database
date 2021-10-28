@@ -42,7 +42,7 @@ class Connection implements ConnectionInterface
      * @return $this
      * itwri 2019/12/19 13:06
      */
-    protected function activateConfig($data, &$config)
+    protected function activateConfig($data, &$config): Connection
     {
         /**
          * 拆分索引数组、key:value数组
@@ -89,7 +89,7 @@ class Connection implements ConnectionInterface
      * @return array
      * itwri 2019/12/19 13:09
      */
-    public function getConfig($flag = 'write')
+    public function getConfig($flag = 'write'): array
     {
         $config = $this->config;
         /**

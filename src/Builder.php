@@ -9,6 +9,7 @@
 namespace Jasmine\Database;
 
 use Jasmine\Database\Grammar\Grammar;
+use Jasmine\Database\Grammar\Mysql;
 use Jasmine\Database\Query\Capsule\Expression;
 use Jasmine\Database\Query\From;
 use Jasmine\Database\Query\Group;
@@ -37,6 +38,11 @@ class Builder implements BuilderInterface
     protected $Having = null;
     protected $Limit = null;
     protected $Set = null;
+
+    /**
+     * @var Grammar
+     */
+    protected $Grammar = null;
 
     function __construct()
     {
@@ -127,7 +133,8 @@ class Builder implements BuilderInterface
      * @return Expression
      * itwri 2020/3/10 21:02
      */
-    public function raw($value){
+    public function raw($value): Expression
+    {
         return new Expression($value);
     }
 
@@ -136,7 +143,8 @@ class Builder implements BuilderInterface
      * @return $this
      * itwri 2019/11/30 14:03
      */
-    public function distinct($distinct){
+    public function distinct($distinct): Builder
+    {
         $this->getSelect()->distinct($distinct);
         return $this;
     }
@@ -146,7 +154,7 @@ class Builder implements BuilderInterface
      * @return $this
      * itwri 2020/3/8 16:55
      */
-    public function fields($fields = '*')
+    public function fields($fields = '*'): Builder
     {
         if ($fields instanceof \Closure) {
             $this->Select->fields(function () use ($fields) {
@@ -163,7 +171,7 @@ class Builder implements BuilderInterface
      * @param bool $append
      * @return $this
      */
-    public function table($table, $append = false)
+    public function table($table, $append = false): Builder
     {
         $this->From->table($this->tablePrefix.$table, $append);
         return $this;
@@ -175,7 +183,7 @@ class Builder implements BuilderInterface
      * @param string $type
      * @return $this
      */
-    public function join($table, $on = null, $type = '')
+    public function join($table, $on = null, $type = ''): Builder
     {
         $arguments = func_get_args();
         if(func_num_args()>0){
@@ -187,11 +195,12 @@ class Builder implements BuilderInterface
 
     /**
      * @param $table
-     * @param string $on
+     * @param string|null $on
      * @return Builder
      * itwri 2019/12/5 14:22
      */
-    public function leftJoin($table, $on = null){
+    public function leftJoin($table, string $on = null): Builder
+    {
         return $this->join($table, $on,'left');
     }
 
@@ -201,7 +210,8 @@ class Builder implements BuilderInterface
      * @return Builder
      * itwri 2019/12/5 14:25
      */
-    public function rightJoin($table, $on = null){
+    public function rightJoin($table, $on = null): Builder
+    {
         return $this->join($table, $on,'left');
     }
 
@@ -211,7 +221,8 @@ class Builder implements BuilderInterface
      * @return Builder
      * itwri 2019/12/5 14:26
      */
-    public function innerJoin($table, $on = null){
+    public function innerJoin($table, $on = null): Builder
+    {
         return $this->join($table, $on,'inner');
     }
 
@@ -222,7 +233,7 @@ class Builder implements BuilderInterface
      * @param string $boolean
      * @return $this
      */
-    public function where($field, $operator = '', $value = '', $boolean = 'and')
+    public function where($field, $operator = '', $value = '', $boolean = 'and'): Builder
     {
         call_user_func_array(array($this->Where, 'where'), func_get_args());
         return $this;
@@ -234,7 +245,7 @@ class Builder implements BuilderInterface
      * @param string $boolean
      * @return Builder
      */
-    public function whereIn($field, Array $values, $boolean = 'and')
+    public function whereIn($field, Array $values, $boolean = 'and'): Builder
     {
         return $this->where($field, 'in', $values, $boolean);
     }
@@ -245,7 +256,7 @@ class Builder implements BuilderInterface
      * @param string $boolean
      * @return Builder
      */
-    public function whereNotIn($field, Array $values, $boolean = 'and')
+    public function whereNotIn($field, Array $values, $boolean = 'and'): Builder
     {
         return $this->where($field, 'not in', $values, $boolean);
     }
@@ -256,7 +267,7 @@ class Builder implements BuilderInterface
      * @param string $boolean
      * @return Builder
      */
-    public function whereBetween($field, Array $values, $boolean = 'and')
+    public function whereBetween($field, Array $values, $boolean = 'and'): Builder
     {
         return $this->where($field, 'between', $values, $boolean);
     }
@@ -267,7 +278,7 @@ class Builder implements BuilderInterface
      * @param string $boolean
      * @return Builder
      */
-    public function whereLike($field, $value, $boolean = 'and')
+    public function whereLike($field, $value, $boolean = 'and'): Builder
     {
         return $this->where($field, 'like', $value, $boolean);
     }
@@ -276,7 +287,7 @@ class Builder implements BuilderInterface
      * @param string $field
      * @return $this
      */
-    public function orderBy($field = '')
+    public function orderBy($field = ''): Builder
     {
         $this->Order->field($field);
         return $this;
@@ -286,7 +297,7 @@ class Builder implements BuilderInterface
      * @param string $field
      * @return $this
      */
-    public function groupBy($field = '')
+    public function groupBy($field = ''): Builder
     {
         $this->Group->field($field);
         return $this;
@@ -299,7 +310,7 @@ class Builder implements BuilderInterface
      * @param string $boolean
      * @return $this
      */
-    public function having($field, $operator = '', $value = '', $boolean = 'and')
+    public function having($field, $operator = '', $value = '', $boolean = 'and'): Builder
     {
         call_user_func_array(array($this->Having, 'having'), func_get_args());
         return $this;
@@ -310,7 +321,7 @@ class Builder implements BuilderInterface
      * @param int $page_size
      * @return $this
      */
-    public function limit($offset = 0, $page_size = 10)
+    public function limit($offset = 0, $page_size = 10): Builder
     {
         if (func_num_args() == 1) {
             $this->Limit->setOffset(0)->setPageSize($offset);
@@ -325,7 +336,7 @@ class Builder implements BuilderInterface
      * @param string $value
      * @return $this
      */
-    public function set($field, $value = '')
+    public function set($field, $value = ''): Builder
     {
         call_user_func_array(array($this->Set, 'set'), func_get_args());
         return $this;
@@ -335,14 +346,14 @@ class Builder implements BuilderInterface
      * @param string $operation
      * @return $this
      */
-    public function clear($operation = '')
+    public function clear($operation = ''): Builder
     {
         $operations = explode(',', "select,from,join,where,order,group,having,limit,set");
         if (func_num_args() == 0) {
             $this->clear($operations);
         } elseif (is_array($operation)) {
-            $operation = array_values($operation);
-            foreach ($operation as $operate) {
+            $operations = (array)array_values($operation);
+            foreach ($operations as $operate) {
                 $this->clear($operate);
             }
             return $this;
@@ -356,7 +367,7 @@ class Builder implements BuilderInterface
      * @param string $options
      * @return $this
      */
-    public function roll($options = '')
+    public function roll($options = ''): Builder
     {
         foreach (func_get_args() as $arg) {
             if (is_string($arg) && !empty($arg)) {
@@ -382,7 +393,8 @@ class Builder implements BuilderInterface
      * @param Grammar $grammar
      * @return string
      */
-    function toSelectSql(Grammar $grammar){
+    function toSelectSql(Grammar $grammar): string
+    {
         return $grammar->toSelectSql($this);
     }
 
@@ -391,15 +403,17 @@ class Builder implements BuilderInterface
      * @param bool $replace
      * @return string
      */
-    function toInsertSql(Grammar $grammar,$replace=false){
+    function toInsertSql(Grammar $grammar, bool $replace=false): string
+    {
         return $grammar->toInsertSql($this,$replace);
     }
 
     /**
      * @param Grammar $grammar
-     * @return mixed
+     * @return string
      */
-    function toUpdateSql(Grammar $grammar){
+    function toUpdateSql(Grammar $grammar): string
+    {
         return $grammar->toUpdateSql($this);
     }
 
@@ -407,7 +421,8 @@ class Builder implements BuilderInterface
      * @param Grammar $grammar
      * @return string
      */
-    function toDeleteSql(Grammar $grammar){
+    function toDeleteSql(Grammar $grammar): string
+    {
         return $grammar->toDeleteSql($this);
     }
 
@@ -415,7 +430,8 @@ class Builder implements BuilderInterface
      * @param Grammar $grammar
      * @return string
      */
-    function toCountSql(Grammar $grammar){
+    function toCountSql(Grammar $grammar): string
+    {
         return $grammar->toCountSql($this);
     }
 }

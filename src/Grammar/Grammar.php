@@ -45,7 +45,7 @@ class Grammar
      * @param string|array $value
      * @return string
      */
-    protected function wrap($value)
+    protected function wrap($value): string
     {
         /**
          * 如果是数组
@@ -139,7 +139,7 @@ class Grammar
      * @param $field
      * @return string
      */
-    protected function wrapField($field)
+    protected function wrapField($field): string
     {
         if ($field instanceof Expression) {
             return $field->getValue();
@@ -163,7 +163,7 @@ class Grammar
      * @param Condition $condition
      * @return string
      */
-    protected function compileCondition(Condition $condition)
+    protected function compileCondition(Condition $condition): string
     {
 
         $value = $condition->getValue();
@@ -188,7 +188,7 @@ class Grammar
      * @param Select $select
      * @return string
      */
-    protected function compileSelect(Select &$select)
+    protected function compileSelect(Select &$select): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapField($item);
@@ -200,7 +200,7 @@ class Grammar
      * @param From $from
      * @return string
      */
-    protected function compileFrom(From &$from)
+    protected function compileFrom(From &$from): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapTable($item);
@@ -213,7 +213,7 @@ class Grammar
      * @param Join $join
      * @return string
      */
-    protected function compileJoin(Join &$join)
+    protected function compileJoin(Join &$join): string
     {
         $sqlArr = array();
         foreach ($join->data() as $item) {
@@ -236,7 +236,7 @@ class Grammar
      * @return string
      * itwri 2019/8/8 21:14
      */
-    protected function compileWhere(Where &$where)
+    protected function compileWhere(Where &$where): string
     {
         $sqlArr = array();
         foreach ($where->data() as $i => $condition) {
@@ -263,7 +263,7 @@ class Grammar
      * @param Order $order
      * @return string
      */
-    protected function compileOrder(Order &$order)
+    protected function compileOrder(Order &$order): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapField($item);
@@ -275,7 +275,7 @@ class Grammar
      * @param Group $group
      * @return string
      */
-    protected function compileGroup(Group &$group)
+    protected function compileGroup(Group &$group): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapField($item);
@@ -287,7 +287,7 @@ class Grammar
      * @param Having $having
      * @return string
      */
-    protected function compileHaving(Having &$having)
+    protected function compileHaving(Having &$having): string
     {
         $where = $having->getWhere();
         $SQL = $this->compileWhere($where);
@@ -298,7 +298,7 @@ class Grammar
      * @param Limit $limit
      * @return string
      */
-    protected function compileLimit(Limit &$limit)
+    protected function compileLimit(Limit &$limit): string
     {
         $data = $limit->data();
         $SQL = empty($data) ? '' : (isset($data[1]) && $data[1] == 0 ? '' : implode(',', $data));
@@ -309,7 +309,7 @@ class Grammar
      * @param Set $set
      * @return string
      */
-    protected function compileSet(Set &$set)
+    protected function compileSet(Set &$set): string
     {
         $sqlArr = array();
         foreach ($set->data() as $field => $value) {
@@ -330,7 +330,7 @@ class Grammar
      * @param bool $replace
      * @return string
      */
-    function toInsertSql(Builder $builder, $replace = false)
+    function toInsertSql(Builder $builder, $replace = false): string
     {
         $data = $builder->getSet()->data();
         if (!is_array(reset($data))) {
@@ -361,7 +361,7 @@ class Grammar
      * @param Builder $builder
      * @return string
      */
-    function toCountSql(Builder &$builder)
+    function toCountSql(Builder &$builder): string
     {
         $FIELDS = '*';
 
@@ -393,7 +393,7 @@ class Grammar
      * @param Builder $builder
      * @return string
      */
-    function toSelectSql(Builder &$builder)
+    function toSelectSql(Builder &$builder): string
     {
         $select = $builder->getSelect();
         $FIELDS = $this->compileSelect($select);
@@ -434,7 +434,7 @@ class Grammar
      * @param Builder $builder
      * @return string
      */
-    function toDeleteSql(Builder $builder)
+    function toDeleteSql(Builder $builder): string
     {
         $from = $builder->getFrom();
         $TABLES = $this->compileFrom($from);
@@ -451,7 +451,7 @@ class Grammar
      * @param Builder $builder
      * @return string
      */
-    function toUpdateSql(Builder $builder)
+    function toUpdateSql(Builder $builder): string
     {
         $from = $builder->getFrom();
         $TABLES = $this->compileFrom($from);

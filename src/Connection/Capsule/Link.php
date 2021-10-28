@@ -33,7 +33,7 @@ class Link
     {
         $this->setConfig($config);
 
-        $grammar_class= isset($this->config['grammar'])?$this->config['grammar']:Grammar::class;
+        $grammar_class= $this->config['grammar'] ?? Grammar::class;
         $this->Grammar = new $grammar_class();
     }
 
@@ -45,7 +45,7 @@ class Link
      *
      * @return array
      */
-    function getConfig()
+    function getConfig(): array
     {
         return $this->config;
     }
@@ -59,7 +59,7 @@ class Link
      * @param array $config
      * @return $this
      */
-    function setConfig(array $config)
+    function setConfig(array $config): Link
     {
         $this->config = is_array($config) ? $config : [];
 
@@ -144,7 +144,7 @@ class Link
      * @param array $config
      * @return string
      */
-    protected function parseDsn(array $config = [])
+    protected function parseDsn(array $config = []): string
     {
         if (isset($config['dsn'])) {
             return $config['dsn'];
