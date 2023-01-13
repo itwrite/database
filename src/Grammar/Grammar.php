@@ -114,7 +114,7 @@ class Grammar
      * @param $value
      * @return array|mixed|string
      */
-    protected function wrapValue($value)
+    public function wrapValue($value)
     {
         if ($value instanceof Expression) {
             return $value->getValue();
@@ -139,7 +139,7 @@ class Grammar
      * @param $field
      * @return string
      */
-    protected function wrapField($field): string
+    public function wrapField($field): string
     {
         if ($field instanceof Expression) {
             return $field->getValue();
@@ -151,7 +151,7 @@ class Grammar
      * @param $table
      * @return array|mixed|string
      */
-    protected function wrapTable($table)
+    public function wrapTable($table)
     {
         if ($table instanceof Expression) {
             return $table->getValue();
@@ -163,7 +163,7 @@ class Grammar
      * @param Condition $condition
      * @return string
      */
-    protected function compileCondition(Condition $condition): string
+    public function compileCondition(Condition $condition): string
     {
 
         $value = $condition->getValue();
@@ -188,7 +188,7 @@ class Grammar
      * @param Select $select
      * @return string
      */
-    protected function compileSelect(Select &$select): string
+    public function compileSelect(Select &$select): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapField($item);
@@ -200,7 +200,7 @@ class Grammar
      * @param From $from
      * @return string
      */
-    protected function compileFrom(From &$from): string
+    public function compileFrom(From &$from): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapTable($item);
@@ -213,7 +213,7 @@ class Grammar
      * @param Join $join
      * @return string
      */
-    protected function compileJoin(Join &$join): string
+    public function compileJoin(Join &$join): string
     {
         $sqlArr = array();
         foreach ($join->data() as $item) {
@@ -236,7 +236,7 @@ class Grammar
      * @return string
      * itwri 2019/8/8 21:14
      */
-    protected function compileWhere(Where &$where): string
+    public function compileWhere(Where &$where): string
     {
         $sqlArr = array();
         foreach ($where->data() as $i => $condition) {
@@ -263,7 +263,7 @@ class Grammar
      * @param Order $order
      * @return string
      */
-    protected function compileOrder(Order &$order): string
+    public function compileOrder(Order &$order): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapField($item);
@@ -275,7 +275,7 @@ class Grammar
      * @param Group $group
      * @return string
      */
-    protected function compileGroup(Group &$group): string
+    public function compileGroup(Group &$group): string
     {
         $SQL = implode(',', array_map(function ($item) {
             return $this->wrapField($item);
@@ -287,7 +287,7 @@ class Grammar
      * @param Having $having
      * @return string
      */
-    protected function compileHaving(Having &$having): string
+    public function compileHaving(Having &$having): string
     {
         $where = $having->getWhere();
         $SQL = $this->compileWhere($where);
@@ -298,7 +298,7 @@ class Grammar
      * @param Limit $limit
      * @return string
      */
-    protected function compileLimit(Limit &$limit): string
+    public function compileLimit(Limit &$limit): string
     {
         $data = $limit->data();
         $SQL = empty($data) ? '' : (isset($data[1]) && $data[1] == 0 ? '' : implode(',', $data));
@@ -309,7 +309,7 @@ class Grammar
      * @param Set $set
      * @return string
      */
-    protected function compileSet(Set &$set): string
+    public function compileSet(Set &$set): string
     {
         $sqlArr = array();
         foreach ($set->data() as $field => $value) {
