@@ -9,6 +9,7 @@
 namespace Jasmine\Database;
 
 
+use ErrorException;
 use Jasmine\Database\Connection\Capsule\Link;
 use Jasmine\Database\Connection\Connection;
 use Jasmine\Database\Interfaces\DatabaseInterface;

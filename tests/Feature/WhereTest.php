@@ -1,11 +1,8 @@
-#database
-PHP database builder class
-
-### demo
-````
 <?php
 
+
 namespace Tests\Feature;
+
 
 use Jasmine\Database\Grammar\Mysql;
 use Jasmine\Database\Query\Capsule\Expression;
@@ -24,4 +21,3 @@ class WhereTest extends TestCase
         echo $grammar->compileWhere($Where);
     }
 }
-````

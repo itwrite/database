@@ -75,7 +75,7 @@ class JoinObject
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     function getOn()
     {
@@ -93,7 +93,7 @@ class JoinObject
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     function getTable()
     {

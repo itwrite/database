@@ -66,9 +66,9 @@ class Condition
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    function getValue(): string
+    function getValue()
     {
         return $this->_value;
     }
